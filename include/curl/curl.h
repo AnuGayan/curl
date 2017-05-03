@@ -849,6 +849,10 @@ typedef enum {
 #define CURLPROTO_SMBS   (1<<27)
 #define CURLPROTO_ALL    (~0) /* enable everything */
 
+#define CURL_OPTIONS_NONE     0L
+#define CURL_OPTIONS_PATH     1L
+#define CURL_OPTIONS_ASTERISK 2L
+
 /* long may be 32 or 64 bits, but we should never depend on anything else
    but 32 */
 #define CURLOPTTYPE_LONG          0
@@ -1781,6 +1785,11 @@ typedef enum {
 
   /* Suppress proxy CONNECT response headers from user callbacks */
   CINIT(SUPPRESS_CONNECT_HEADERS, LONG, 265),
+
+  /* Send a HTTP OPTIONS request:
+     CURL_OPTIONS_PATH - regular path,
+     CURL_OPTIONS_ASTERISK - asterisk */
+  CINIT(HTTP_OPTIONS, LONG, 266),
 
   CURLOPT_LASTENTRY /* the last unused */
 } CURLoption;

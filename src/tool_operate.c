@@ -970,7 +970,11 @@ static CURLcode operate_do(struct GlobalConfig *global,
 #endif /* !CURL_DISABLE_PROXY */
 
         my_setopt(curl, CURLOPT_FAILONERROR, config->failonerror?1L:0L);
-        my_setopt(curl, CURLOPT_UPLOAD, uploadfile?1L:0L);
+        if(config->use_httpoptions)
+          /* new in curl 7.55.0 */
+          my_setopt(curl, CURLOPT_HTTP_OPTIONS, CURL_OPTIONS_ASTERISK);
+        else
+          my_setopt(curl, CURLOPT_UPLOAD, uploadfile?1L:0L);
         my_setopt(curl, CURLOPT_DIRLISTONLY, config->dirlistonly?1L:0L);
         my_setopt(curl, CURLOPT_APPEND, config->ftp_append?1L:0L);
 

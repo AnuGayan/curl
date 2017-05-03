@@ -20,41 +20,42 @@
 .\" *
 .\" **************************************************************************
 .\"
-.TH CURLOPT_NOBODY 3 "17 Jun 2014" "libcurl 7.37.0" "curl_easy_setopt options"
+.TH CURLOPT_HTTP_OPTIONS 3 "17 Jun 2014" "libcurl 7.37.0" "curl_easy_setopt options"
 .SH NAME
-CURLOPT_NOBODY \- do the download request without getting the body
+CURLOPT_HTTP_OPTIONS \- send a HTTP OPTIONS request
 .SH SYNOPSIS
 #include <curl/curl.h>
 
-CURLcode curl_easy_setopt(CURL *handle, CURLOPT_NOBODY, long opt);
+CURLcode curl_easy_setopt(CURL *handle, CURLOPT_HTTP_OPTIONS, value);
 .SH DESCRIPTION
-A long parameter set to 1 tells libcurl to not include the body-part in the
-output when doing what would otherwise be a download. For HTTP(S), this makes
-libcurl do a HEAD request. For most other protocols it means just not asking
-to transfer the body data.
+Send a HTTP OPTIONS request to the server according to the set
+\fIvalue\fP. All other values are reserved for the future.
 
-Enabling this option means asking for a download but without a body.
+.IP CURL_OPTIONS_ASTERISK (2)
+When this value is set, an "OPTIONS *" request is sent to the server.
+.IP CURL_OPTIONS_PATH (1)
+When this value is set, an "OPTIONS [path]" request is sent to the server with
+the path as given in the URL with \fICURLOPT_URL(3)\fP.
 .SH DEFAULT
-0, the body is transferred
+none
 .SH PROTOCOLS
-Most
+HTTP
 .SH EXAMPLE
 .nf
 curl = curl_easy_init();
 if(curl) {
   curl_easy_setopt(curl, CURLOPT_URL, "http://example.com");
 
-  /* get us the resource without a body! */
-  curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
+  /* issue an OPTIONS * request */
+  curl_easy_setopt(curl, CURLOPT_HTTP_OPTIONS, CURL_OPTIONS_ASTERISK);
 
   /* Perform the request */
   curl_easy_perform(curl);
 }
 .fi
 .SH AVAILABILITY
-Always
+Added in 7.55.0
 .SH RETURN VALUE
-Returns CURLE_OK
+Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not.
 .SH "SEE ALSO"
-.BR CURLOPT_HTTPGET "(3), " CURLOPT_POST "(3), "
-.BR CURLOPT_HTTP_OPTIONS "(3), "
+.BR CURLOPT_CUSTOMREQUEST "(3), " CURLOPT_HTTPGET "(3), "
